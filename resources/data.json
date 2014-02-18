@@ -1,0 +1,28 @@
+[
+	{
+		"id":1,
+		"name":"Honda Jazz",
+		"color":"Blue"
+	},
+	{	"id":2,
+		"name":"Honda City",
+		"color":"Black"
+	},
+	{	"id":3,
+		"name":"Honda Civic",
+		"color":"Maroon"
+	},
+	{	"id":4,
+		"name":"Hyundai Fluidic",
+		"color":"White"
+	},
+	{	"id":5,
+		"name":"Hyundai i10 Grande",
+		"color":"Silver"
+	},
+	{
+		"id":6,
+		"name":"Maruti Alto",
+		"color":"Green"
+	}
+]
