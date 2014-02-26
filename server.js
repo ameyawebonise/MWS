@@ -5,9 +5,11 @@ var express=require('express') //express web server
 	,reload=require('reload')
 	,colors=require('colors') //for tweaking the command line font color
 	,http=require('http')  //the http server
-	,cars=require('./server/cars')
+	,widgets=require('./server/widgets')
 	,templates=require('./server/templates')
-	,fs = require('fs');//requrie cars
+	,fs = require('fs')//requrie cars
+	,socket = require('socket.io');
+
 
 
 var app= express();
@@ -22,8 +24,7 @@ app.configure(function() {
   app.use(express.bodyParser()) 
   app.use(app.router) 
   app.use(express.static(clientDir)) 
-
-  //app.set("jsonp callback", true);
+   //app.set("jsonp callback", true);
 
 })
 
@@ -44,10 +45,12 @@ app.get('/widget',function(req,res){
 });
 
 //define the routes
-//get data
-app.get('/api/cars',cars.list);
+
 //load the templates
 app.get('/api/templates',templates.fetch);
+//get data
+app.get('/api/widgets',widgets.list);
+
 
 
 var server=http.createServer(app);
@@ -58,3 +61,28 @@ reload(server,app);
 server.listen(app.get('port'),function(){
 	console.log("Server started in %s mode on %d ",colors.red(process.env.NODE_ENV),app.get('port'));
 })
+
+var io = socket.listen(server);
+
+io.sockets.on('connection', function (socket) {
+  
+  //socket.emit('news', { hello: 'world' });
+  
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+
+});
+
+/*
+var count =0;
+io.sockets.on('connection', function (socket) {
+  	socket.emit('connected', { count: count });
+
+	
+});
+
+io.sockets.on('register',function(data){
+	console.log("************************ "+data);
+});
+*/
