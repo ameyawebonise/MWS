@@ -63,26 +63,35 @@ server.listen(app.get('port'),function(){
 })
 
 var io = socket.listen(server);
+var connectedClients=[];
+var count=0;
+
 
 io.sockets.on('connection', function (socket) {
+  if(connectedClients.indexOf(socket)==-1)
+  		connectedClients.push(socket);
   
-  //socket.emit('news', { hello: 'world' });
   
-  socket.on('my other event', function (data) {
+  //1st event after connecttion
+  socket.emit('connected',{hello:'world'}); 
+
+  
+  //request by the client to register
+  socket.on('register', function (data) {
     console.log(data);
+    count=connectedClients.length;
+    io.sockets.emit('registered' ,{count : count});
   });
 
+
+  //disconnect event
+  socket.on('disconnect', function() {
+      if(connectedClients.indexOf(socket)>-1){
+      	connectedClients.splice(i,1);
+      }
+      count=connectedClients.length;
+      io.sockets.emit('refresh',{count:count});
+   });
 });
 
-/*
-var count =0;
-io.sockets.on('connection', function (socket) {
-  	socket.emit('connected', { count: count });
 
-	
-});
-
-io.sockets.on('register',function(data){
-	console.log("************************ "+data);
-});
-*/

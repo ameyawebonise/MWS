@@ -6,7 +6,7 @@ var WTEMPLATE;
 //link up socket.io
 var socket_io  = document.createElement('script');
     socket_io.type = "text/javascript";
-    socket_io.src  = "http://localhost:3000/socket.io/socket.io.js";
+    socket_io.src  = "http://10.0.0.138:3000/socket.io/socket.io.js";
     (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(socket_io);    
 
     //$("#someElement").append( script );
@@ -31,21 +31,21 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.4.2') {
 
 } else {
     // The jQuery version on the window is the one we want to use
-    jQuery = window.jQuery;
+    $ = window.jQuery;
     main();
 }
 
 
 /******** Called once jQuery has loaded ******/
 function scriptLoadHandler() {
-    jQuery = window.jQuery.noConflict(true);
+    $ = window.jQuery.noConflict(true);
     main(); 
 }
 
 
 /*Gets the template from the server*/
 function fetch_content(){
-        jQuery.getJSON("http://127.0.0.1:3000/api/templates?callback=?", function(data){ 
+        $.getJSON("http://10.0.0.138:3000/api/templates?callback=?", function(data){ 
             init_content(data);
          }); 
 }
@@ -53,14 +53,14 @@ function fetch_content(){
 function init_content(data){
     WTEMPLATE=data.html;
     console.log(WTEMPLATE);
-    jQuery(".midget-widget-container").html(WTEMPLATE);
+    $(".midget-widget-container").html(WTEMPLATE);
 }
 
 var myWidgetsArr =[];
 
 
 function fetch_widgets(){
-    jQuery.getJSON("http://127.0.0.1:3000/api/widgets?callback=?", function(data){ 
+    $.getJSON("http://10.0.0.138:3000/api/widgets?callback=?", function(data){ 
             post_fetch_widgets(data);
          });    
 }
@@ -76,7 +76,7 @@ function post_fetch_widgets(data){
 
     myWidgetsArr.forEach(function(widget){
         widget.register();
-      //  widget.print();
+      
     });
 
 
@@ -85,7 +85,7 @@ function post_fetch_widgets(data){
 
 /******** Our main function ********/
 function main() { 
-    jQuery(document).ready(function($) { 
+    $(document).ready(function($) { 
         /******* Load CSS *******/
         var css_link = $("<link>", { 
             rel: "stylesheet", 
@@ -93,17 +93,26 @@ function main() {
             href: "style.css" 
         });
         css_link.append('head');
-       
+    
+        fetch_content();       
+
      
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://10.0.0.138:3000');
   
     socket.on('connected', function (data) {
         console.log(data);
-        socket.emit('my other event', { my: 'data' });
+        socket.emit('register', { id: 1 });
     });
 
-     socket.emit('my other event 2', { my: 'data' });
-   
+    socket.on('registered', function (data) {
+        //console.log("count is " +data.count);
+        console.log($('.midget-widget-container .round-button').text(data.count));
+    });
+
+    socket.on('refresh', function (data) {
+        //console.log("count is " +data.count);
+        console.log($('.midget-widget-container .round-button').text(data.count));
+    });
 
 
  });

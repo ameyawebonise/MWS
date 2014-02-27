@@ -12,6 +12,7 @@ function fetch(req,res){
 //	TEMPLATE.html="<div>Hello I am loaded from server</div>"; //load this from a file
 
   TEMPLATE.html=' <a href="http://google.com" class="round-button">OK</a>';
+ 
 	if (req.query && req.query.callback) {
     res.set({
       // nice to have, but Chrome dont seem to mind either way
