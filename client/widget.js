@@ -92,9 +92,9 @@ function main() {
             type: "text/css", 
             href: "style.css" 
         });
-        css_link.append('head');
-    
-        fetch_content();       
+    //css_link.appendTo('head');
+    css_link.appendTo('head');
+    fetch_content();       
 
      
     var socket = io.connect('http://10.0.0.138:3000');

@@ -66,7 +66,6 @@ var io = socket.listen(server);
 var connectedClients=[];
 var count=0;
 
-
 io.sockets.on('connection', function (socket) {
   if(connectedClients.indexOf(socket)==-1)
   		connectedClients.push(socket);
@@ -86,12 +85,16 @@ io.sockets.on('connection', function (socket) {
 
   //disconnect event
   socket.on('disconnect', function() {
-      if(connectedClients.indexOf(socket)>-1){
-      	connectedClients.splice(i,1);
+    var index=connectedClients.indexOf(socket)
+      if(index>-1){
+      	connectedClients.splice(index,1);
       }
       count=connectedClients.length;
-      io.sockets.emit('refresh',{count:count});
+   	io.sockets.emit('refresh',{count:count});
    });
+
+
+
 });
 
 
