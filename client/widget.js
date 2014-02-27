@@ -54,6 +54,10 @@ function init_content(data){
     WTEMPLATE=data.html;
     console.log(WTEMPLATE);
     $(".midget-widget-container").html(WTEMPLATE);
+    $("#send").click(function(data){
+            sendMsg("hello");
+          
+    });
 }
 
 var myWidgetsArr =[];
@@ -65,8 +69,6 @@ function fetch_widgets(){
          });    
 }
   
-
-
 
 function post_fetch_widgets(data){
    
@@ -83,6 +85,7 @@ function post_fetch_widgets(data){
 }
 
 
+var socket;
 /******** Our main function ********/
 function main() { 
     $(document).ready(function($) { 
@@ -92,34 +95,42 @@ function main() {
             type: "text/css", 
             href: "style.css" 
         });
-    //css_link.appendTo('head');
+    
     css_link.appendTo('head');
     fetch_content();       
 
+    socket = io.connect('http://10.0.0.138:3000');
      
-    var socket = io.connect('http://10.0.0.138:3000');
+    
   
     socket.on('connected', function (data) {
-        console.log(data);
         socket.emit('register', { id: 1 });
     });
 
     socket.on('registered', function (data) {
-        //console.log("count is " +data.count);
+        
         console.log($('.midget-widget-container .round-button').text(data.count));
     });
 
     socket.on('refresh', function (data) {
-        //console.log("count is " +data.count);
         console.log($('.midget-widget-container .round-button').text(data.count));
     });
+
+    socket.on('msgRecieved', function (data) {
+        $('#chatField').val(data.msg.msg)
+    });
+
 
 
  });
 
+
 }
 
-
+function sendMsg(data){
+        console.log(data);
+       socket.emit('msgSent', { msg:data });
+}
 //widget model
 function myWidget(data){
     

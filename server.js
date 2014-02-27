@@ -93,6 +93,13 @@ io.sockets.on('connection', function (socket) {
    	io.sockets.emit('refresh',{count:count});
    });
 
+	socket.on('msgSent', function (data) {
+    console.log("***********************" +data);
+   // count=connectedClients.length;
+   	 io.sockets.emit('msgRecieved' ,{msg : data});
+  });  
+
+
 
 
 });

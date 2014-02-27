@@ -11,7 +11,7 @@ var TEMPLATE={};
 function fetch(req,res){
 //	TEMPLATE.html="<div>Hello I am loaded from server</div>"; //load this from a file
 
-  TEMPLATE.html=' <a href="http://google.com" class="round-button">OK</a>';
+  TEMPLATE.html='<div><a href="http://google.com" class="round-button">OK</a><input id="chatField" type="text"/> <br><input id="send"  text ="send" type="button"/><div>';
  
 	if (req.query && req.query.callback) {
     res.set({
